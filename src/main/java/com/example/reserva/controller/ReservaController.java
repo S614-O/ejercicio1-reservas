@@ -39,6 +39,10 @@ public class ReservaController {
         log.info("GET /api/reservas/activas");
         List<ReservaResponseDTO> reservas = reservaService.obtenerTodasLasReservas();
         return ResponseEntity.ok(reservas);
+        /*
+        Al ponerle .ok(), le estás pegando a esa bandeja una etiqueta verde con el código 200 OK
+        ese codigo es universal osea que si te tira el 200 es que todo salio de maravilla, vo dale noma
+        */
     }
     
     
