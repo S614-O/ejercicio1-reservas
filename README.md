@@ -1,3 +1,11 @@
 EJERCICIO 1 RESERVAS
 
-LO UNICO QUE ESTA HECHO POR AHORA ES CREAR, NADA MAS
+Funciones Listas
+
+1.- Crear
+2.- Listar todos
+
+No listas:
+1.- Buscar por ID
+2.- Actualizar reserva
+3.- Cancelar reserva (DELETE)
