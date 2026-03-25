@@ -1,11 +1,14 @@
-EJERCICIO 1 RESERVAS
+# Ejercicio 1: Sistema de Reservas
 
-Funciones Listas
+API REST desarrollada en Spring Boot para la gestión y control de reservas. 
 
-1.- Crear
-2.- Listar todos
+### ✅ Funciones Listas
+- [x] **Crear reserva** (POST)
+- [x] **Listar todas las reservas** (GET)
 
-No listas:
-1.- Buscar por ID
-2.- Actualizar reserva
-3.- Cancelar reserva (DELETE)
+### Funciones Pendientes (WIP)
+- [ ] **Buscar reserva por ID** (GET)
+- [ ] **Actualizar reserva** (PUT)
+- [ ] **Cancelar reserva** (DELETE)
+
+---
