@@ -1,6 +1,7 @@
 package com.example.reserva.service.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
@@ -35,8 +36,20 @@ public class ReservaServiceImpl implements ReservaService{
 
     @Override
     public List<ReservaResponseDTO> obtenerTodasLasReservas() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerTodasLasReservas'");
+        log.info("Obteniendo todas las Categorias");
+
+        return reservaRepository.findAll()
+            .stream()
+            .map(this::convertirEnEntidadADTO)
+            .collect(Collectors.toList());
+            /*
+            Primero, findAll() saca todas tus reservas "crudas" de la base de datos y las pone a avanzar en fila india 
+            sobre una cinta transportadora, que es el .stream(). Conforme van avanzando por esa cinta, pasan por una 
+            máquina transformadora llamada .map(); esta máquina toma cada reserva original, le aplica el método traductor (this::convertirEnEntidadADTO) 
+            y la saca convertida en un ResponseDTO limpio y presentable. Al final del recorrido está el .collect(), que 
+            simplemente se encarga de recolectar todas esas nuevas cajas ya transformadas 
+            y agruparlas en una lista final lista para enviarse y woala parece dificil pero no es mucho pero es trabajo honesto
+            */
     }
 
     @Override

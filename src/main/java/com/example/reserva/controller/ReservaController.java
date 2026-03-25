@@ -1,7 +1,10 @@
 package com.example.reserva.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +16,7 @@ import com.example.reserva.service.ReservaService;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+
 
 
 @RestController //Le dice a Spring: "Esta clase es el recepcionista. Va a escuchar peticiones de internet y va a devolver datos puros (en formato JSON), no páginas web"
@@ -29,6 +33,17 @@ public class ReservaController {
         ReservaResponseDTO reservaCreada = reservaService.crearReserva(requestDTO);        
         return new ResponseEntity<>(reservaCreada, HttpStatus.CREATED);
     }
+
+    @GetMapping("/activas")
+    public ResponseEntity<List<ReservaResponseDTO>> obtenerTodasLasReservas(){
+        log.info("GET /api/reservas/activas");
+        List<ReservaResponseDTO> reservas = reservaService.obtenerTodasLasReservas();
+        return ResponseEntity.ok(reservas);
+    }
+    
+    
+
+
     
 
 }
