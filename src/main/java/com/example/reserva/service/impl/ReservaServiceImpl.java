@@ -1,5 +1,6 @@
 package com.example.reserva.service.impl;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,20 +55,53 @@ public class ReservaServiceImpl implements ReservaService{
 
     @Override
     public ReservaResponseDTO obtenerReservaPorId(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'obtenerReservaPorId'");
+        log.info("Buscando su Reserva por id: {}", id);
+        Reserva reserva = reservaRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Error " + id));
+        /*
+        Porque RuntimeException y no el del profe, Primero me dio paja porque habria que hacer la clase Exception y ni kgando
+        Segundo el RuntimeException es para tomar un error generico, osea try catch sin mucho codigo
+        por ahora para tomar errores y no volverse loco (como yo) de momento usar el RuntimeException
+        y despues usar los Exception mas avanzados
+        */
+        return convertirEnEntidadADTO(reserva);
     }
 
     @Override
     public ReservaResponseDTO actualizarReserva(Long id, ReservaRequestDTO requestDTO) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actualizarReserva'");
+        log.info("Actualizando datos de Reserva con ID: {}", id);
+
+        Reserva reserva = reservaRepository.findById(id)
+        .orElseThrow(() -> new RuntimeException("Reserva no encontrada con ID: {}" + id));
+
+        validarDatosReserva(requestDTO);
+        // Mandamos a la xuxa los datos viejos y le mandamos unos nuevos
+        reserva.setNombreCliente(requestDTO.getNombreCliente());
+        reserva.setTelefono(requestDTO.getTelefono());
+        reserva.setFechaHora(requestDTO.getFechaHora());
+        reserva.setNumeroPersonas(requestDTO.getNumeroPersonas());
+        reserva.setEstado(requestDTO.getEstado());
+
+        // Guardamos la actualización
+        Reserva reservaActualizada = reservaRepository.save(reserva);
+
+        // Empacamos y devolvemos
+        return convertirEnEntidadADTO(reservaActualizada);
+
+
+
     }
 
     @Override
     public void eliminarReserva(Long id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'eliminarReserva'");
+        log.info("Eliminando Rerserva con id {}", id);
+        
+        if (!reservaRepository.existsById(id)){
+            throw new RuntimeException("Reserva no encontrada con ID: " + id);
+        }
+
+        reservaRepository.deleteById(id);
+        log.info("Reserva eliminada con id {}", id);
     }
 
     private Reserva convertirDTOAEntidad(ReservaRequestDTO dto){
@@ -105,7 +139,23 @@ public class ReservaServiceImpl implements ReservaService{
         porque si no te pasara como a mi que estuve MEDIA HORA BUSCANDO porque no me aparecia el .builder()
         
         */
-
     }
 
+    private void validarDatosReserva(ReservaRequestDTO requestDTO){
+        if(requestDTO.getNombreCliente() == null || requestDTO.getNombreCliente().trim().isEmpty()){
+            throw new RuntimeException("El nombre del cliente es obligatorio");
+        }
+        
+        if(requestDTO.getNombreCliente().length() < 3){
+            throw new RuntimeException("El nombre del cliente debe tener almenos 3 caracteres");
+        }
+
+        if(requestDTO.getNumeroPersonas() <= 1 || requestDTO.getNumeroPersonas() >= 12){
+            throw new RuntimeException("El maximo de personas es de 12");
+        }
+
+        if(requestDTO.getFechaHora().isBefore(LocalDateTime.now())){
+            throw new RuntimeException("La fecha no puede ser un dia anterior");
+        }
+    }
 }
